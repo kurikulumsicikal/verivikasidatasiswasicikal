@@ -191,11 +191,11 @@
 <body>
 
 <div class="container">
-    <h2>VERIVIKASI KESESUAIAN DATA SISWA</h2>
-    <p class="subtitle">Periksa data Anda, klik <strong>Sesuai</strong> jika sudah benar atau pilih <strong>Koreksi</strong> jika ada yang salah</p>
+    <h2>Kesesuaian Data Siswa</h2>
+    <p class="subtitle">Periksa data Anda menggunakan NIPD, klik <strong>Sesuai</strong> jika sudah benar atau pilih <strong>Koreksi</strong> jika ada yang salah</p>
     
     <div class="search-box">
-        <input type="text" id="nisnInput" placeholder="Masukkan NISN Siswa...">
+        <input type="text" id="nipdInput" placeholder="Masukkan NIPD Siswa...">
         <button onclick="verifikasiSiswa()">Cek Data</button>
     </div>
 
@@ -214,16 +214,16 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwKVnTxE7WrRNw_IoId4VmIepYNLEBbXWIypGgNJ7ohWNSoKOb1z6nqZRUIUMT4zL5mJw/exec";
     let currentSiswaNama = "";
-    let currentSiswaNisn = "";
+    let currentSiswaNipd = "";
 
     function verifikasiSiswa() {
-        const nisn = document.getElementById('nisnInput').value.trim();
+        const nipd = document.getElementById('nipdInput').value.trim();
         const loadingDiv = document.getElementById('loading');
         const errorBox = document.getElementById('errorBox');
         const resultCard = document.getElementById('resultCard');
 
-        if (!nisn) {
-            alert('Harap masukkan NISN terlebih dahulu!');
+        if (!nipd) {
+            alert('Harap masukkan NIPD terlebih dahulu!');
             return;
         }
 
@@ -231,22 +231,22 @@
         errorBox.style.display = 'none';
         loadingDiv.style.display = 'block';
 
-        fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`)
+        fetch(`${API_URL}?nipd=${encodeURIComponent(nipd)}`)
             .then(response => response.json())
             .then(data => {
                 loadingDiv.style.display = 'none';
 
                 if (data.found) {
                     currentSiswaNama = data.nama || '-';
-                    currentSiswaNisn = data.nisn || '-';
+                    currentSiswaNipd = data.nipd || '-';
 
                     let tglLahirFormatted = data.tanggalLahir ? new Date(data.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
 
                     let rows = [
                         { label: "Nama Lengkap", val: currentSiswaNama },
                         { label: "Jenis Kelamin", val: data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : data.jk || '-') },
-                        { label: "NIPD", val: data.nipd || '-' },
-                        { label: "NISN", val: currentSiswaNisn },
+                        { label: "NIPD", val: currentSiswaNipd },
+                        { label: "NISN", val: data.nisn || '-' },
                         { label: "Tempat Lahir", val: data.tempatLahir || '-' },
                         { label: "Tanggal Lahir", val: tglLahirFormatted },
                         { label: "NIK", val: data.nik || '-' },
@@ -269,7 +269,6 @@
                     let tableHtml = `<tr><th>Data Field</th><th>Data di Server</th><th>Status / Hasil Koreksi & Aksi</th></tr>`;
                     
                     rows.forEach((row, index) => {
-                        // Ambil riwayat status/koreksi yang tersimpan di server jika ada
                         let savedVal = data.statusKesesuaian ? data.statusKesesuaian[row.label] : "";
                         let badgeHtml = "";
                         let defaultInputVal = "";
@@ -277,7 +276,6 @@
                         if (savedVal === "Sesuai") {
                             badgeHtml = `<br><span class="status-badge badge-sesuai">✓ Sesuai</span>`;
                         } else if (savedVal && savedVal !== "") {
-                            // Jika ada isinya dan bukan "Sesuai", berarti itu teks koreksi dari siswa
                             badgeHtml = `<br><span class="status-badge badge-koreksi">✎ Koreksi: <strong>${savedVal}</strong></span>`;
                             defaultInputVal = savedVal;
                         }
@@ -304,7 +302,7 @@
                     document.getElementById('instructionBox').style.display = 'block';
                     resultCard.style.display = 'block';
                 } else {
-                    errorBox.innerHTML = 'Data siswa dengan NISN <strong>' + nisn + '</strong> tidak ditemukan.';
+                    errorBox.innerHTML = 'Data siswa dengan NIPD <strong>' + nipd + '</strong> tidak ditemukan.';
                     errorBox.style.display = 'block';
                 }
             })
@@ -323,7 +321,7 @@
 
     function kirimData(fieldLabel, teksKirim, index) {
         let payload = {
-            nisn: currentSiswaNisn,
+            nipd: currentSiswaNipd,
             nama: currentSiswaNama,
             field: fieldLabel,
             koreksi: teksKirim
