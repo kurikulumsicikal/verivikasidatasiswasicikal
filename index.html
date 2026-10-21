@@ -23,7 +23,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            max-width: 900px;
+            max-width: 950px;
             width: 100%;
         }
         h2 {
@@ -105,6 +105,7 @@
             border-bottom: 1px solid #edf2f7;
             font-size: 14px;
             text-align: left;
+            vertical-align: middle;
         }
         .table-data tr:nth-child(even) {
             background-color: #f7fafc;
@@ -177,13 +178,14 @@
         }
         .status-badge {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-size: 11px;
             font-weight: bold;
-            margin-left: 6px;
+            margin-top: 4px;
         }
         .badge-sesuai { background-color: #c6f6d5; color: #22543d; }
+        .badge-koreksi { background-color: #fed7d7; color: #c53030; }
     </style>
 </head>
 <body>
@@ -203,7 +205,7 @@
     <div id="resultCard" class="result-card">
         <div class="result-header">Tabel Kesesuaian Data</div>
         <div class="instruction" id="instructionBox">
-            Silakan periksa setiap baris data. Klik tombol hijau <strong>Sesuai</strong> atau tombol merah <strong>Koreksi</strong> untuk memperbaikinya.
+            Silakan periksa setiap baris data. Status atau koreksi yang sudah pernah dikirim akan otomatis terlihat di sini.
         </div>
         <table class="table-data" id="dataTable"></table>
     </div>
@@ -264,20 +266,33 @@
                         { label: "Anak ke-", val: data.anakKe ? `Anak ke-${data.anakKe}` : '-' }
                     ];
 
-                    let tableHtml = `<tr><th>Data Field</th><th>Data di Server</th><th>Aksi Verifikasi</th></tr>`;
+                    let tableHtml = `<tr><th>Data Field</th><th>Data di Server</th><th>Status / Hasil Koreksi & Aksi</th></tr>`;
                     
                     rows.forEach((row, index) => {
+                        // Ambil riwayat status/koreksi yang tersimpan di server jika ada
+                        let savedVal = data.statusKesesuaian ? data.statusKesesuaian[row.label] : "";
+                        let badgeHtml = "";
+                        let defaultInputVal = "";
+
+                        if (savedVal === "Sesuai") {
+                            badgeHtml = `<br><span class="status-badge badge-sesuai">✓ Sesuai</span>`;
+                        } else if (savedVal && savedVal !== "") {
+                            // Jika ada isinya dan bukan "Sesuai", berarti itu teks koreksi dari siswa
+                            badgeHtml = `<br><span class="status-badge badge-koreksi">✎ Koreksi: <strong>${savedVal}</strong></span>`;
+                            defaultInputVal = savedVal;
+                        }
+
                         tableHtml += `
                             <tr>
                                 <td class="label">${row.label}</td>
-                                <td class="value" id="valCell_${index}">${row.val} <span id="badge_${index}"></span></td>
+                                <td class="value">${row.val} <div id="badgeContainer_${index}">${badgeHtml}</div></td>
                                 <td class="action">
                                     <div id="actionContainer_${index}">
                                         <button class="btn-sesuai" onclick="kirimData('${row.label}', 'Sesuai', ${index})">Sesuai</button>
                                         <button class="btn-koreksi" onclick="bukaFormKoreksi(${index})">Koreksi</button>
                                     </div>
                                     <div class="edit-container" id="editContainer_${index}">
-                                        <input type="text" id="editInput_${index}" class="edit-input" placeholder="Ketik data yang benar...">
+                                        <input type="text" id="editInput_${index}" class="edit-input" value="${defaultInputVal}" placeholder="Ketik data yang benar...">
                                         <button class="btn-kirim" onclick="kirimKoreksiData('${row.label}', ${index})">Kirim Perbaikan</button>
                                     </div>
                                 </td>
@@ -320,12 +335,13 @@
         })
         .then(res => res.json())
         .then(response => {
+            let badgeContainer = document.getElementById(`badgeContainer_${index}`);
             if(teksKirim === 'Sesuai') {
-                document.getElementById(`badge_${index}`).innerHTML = `<span class="status-badge badge-sesuai">✓ Sesuai</span>`;
+                badgeContainer.innerHTML = `<span class="status-badge badge-sesuai">✓ Sesuai</span>`;
                 document.getElementById(`editContainer_${index}`).style.display = 'none';
                 alert(`"${fieldLabel}" berhasil dicatat sebagai Sesuai.`);
             } else {
-                document.getElementById(`badge_${index}`).innerHTML = `<span class="status-badge" style="background-color:#fed7d7; color:#c53030;">✎ Dikoreksi</span>`;
+                badgeContainer.innerHTML = `<span class="status-badge badge-koreksi">✎ Koreksi: <strong>${teksKirim}</strong></span>`;
                 alert(`Koreksi untuk "${fieldLabel}" berhasil dikirim!`);
                 bukaFormKoreksi(index);
             }
