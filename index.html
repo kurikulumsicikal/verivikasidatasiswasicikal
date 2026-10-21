@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Data Siswa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 650px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #1a202c;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: #3182ce;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2b6cb0;
+        }
+        .loading {
+            text-align: center;
+            color: #718096;
+            display: none;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        .error-box {
+            background-color: #fff5f5;
+            color: #e53e3e;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #fed7d7;
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .result-card {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .result-header {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 12px 16px;
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 1px solid #bee3f8;
+        }
+        .table-data {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-data td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+        }
+        .table-data tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        .table-data td.label {
+            font-weight: 600;
+            color: #4a5568;
+            width: 38%;
+        }
+        .table-data td.value {
+            color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Verifikasi Data Siswa</h2>
+    <p class="subtitle">Masukkan NISN untuk memeriksa kecocokan data siswa</p>
+    
+    <div class="search-box">
+        <input type="text" id="nisnInput" placeholder="Masukkan NISN Siswa...">
+        <button onclick="verifikasiSiswa()">Cek Data</button>
+    </div>
+
+    <div id="loading" class="loading">Memeriksa database...</div>
+    <div id="errorBox" class="error-box"></div>
+
+    <div id="resultCard" class="result-card">
+        <div class="result-header">Data Siswa Ditemukan</div>
+        <table class="table-data">
+            <tr><td class="label">Nama Lengkap</td><td class="value" id="resNama">-</td></tr>
+            <tr><td class="label">NIPD</td><td class="value" id="resNipd">-</td></tr>
+            <tr><td class="label">Jenis Kelamin</td><td class="value" id="resJk">-</td></tr>
+            <tr><td class="label">NISN</td><td class="value" id="resNisn">-</td></tr>
+            <tr><td class="label">Tempat, Tgl Lahir</td><td class="value" id="resTtl">-</td></tr>
+            <tr><td class="label">NIK</td><td class="value" id="resNik">-</td></tr>
+            <tr><td class="label">Agama</td><td class="value" id="resAgama">-</td></tr>
+            <tr><td class="label">Alamat Lengkap</td><td class="value" id="resAlamat">-</td></tr>
+            <tr><td class="label">Nama Ayah</td><td class="value" id="resAyah">-</td></tr>
+            <tr><td class="label">Pekerjaan Ayah</td><td class="value" id="resPekerjaanAyah">-</td></tr>
+            <tr><td class="label">Nama Ibu</td><td class="value" id="resIbu">-</td></tr>
+            <tr><td class="label">Pekerjaan Ibu</td><td class="value" id="resPekerjaanIbu">-</td></tr>
+            <tr><td class="label">Rombel Saat Ini</td><td class="value" id="resRombel">-</td></tr>
+            <tr><td class="label">Sekolah Asal</td><td class="value" id="resSekolahAsal">-</td></tr>
+            <tr><td class="label">Anak ke- / Saudara</td><td class="value" id="resAnakSaudara">-</td></tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwKVnTxE7WrRNw_IoId4VmIepYNLEBbXWIypGgNJ7ohWNSoKOb1z6nqZRUIUMT4zL5mJw/exec";
+
+    function verifikasiSiswa() {
+        const nisn = document.getElementById('nisnInput').value.trim();
+        const loadingDiv = document.getElementById('loading');
+        const errorBox = document.getElementById('errorBox');
+        const resultCard = document.getElementById('resultCard');
+
+        if (!nisn) {
+            alert('Harap masukkan NISN terlebih dahulu!');
+            return;
+        }
+
+        resultCard.style.display = 'none';
+        errorBox.style.display = 'none';
+        loadingDiv.style.display = 'block';
+
+        fetch(`${API_URL}?nisn=${encodeURIComponent(nisn)}`)
+            .then(response => response.json())
+            .then(data => {
+                loadingDiv.style.display = 'none';
+
+                if (data.found) {
+                    document.getElementById('resNama').innerText = data.nama || '-';
+                    document.getElementById('resNipd').innerText = data.nipd || '-';
+                    document.getElementById('resJk').innerText = data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : data.jk || '-');
+                    document.getElementById('resNisn').innerText = data.nisn || '-';
+                    
+                    let ttl = `${data.tempatLahir || ''}`;
+                    if (data.tanggalLahir) {
+                        let tgl = new Date(data.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                        ttl += ttl ? `, ${tgl}` : tgl;
+                    }
+                    document.getElementById('resTtl').innerText = ttl || '-';
+
+                    document.getElementById('resNik').innerText = data.nik || '-';
+                    document.getElementById('resAgama').innerText = data.agama || '-';
+                    
+                    let alamatLengkap = `${data.alamat || ''}`;
+                    if (data.rt || data.rw) alamatLengkap += ` RT ${data.rt || 0}/RW ${data.rw || 0}`;
+                    if (data.kelurahan) alamatLengkap += `, Desa/Kel. ${data.kelurahan}`;
+                    if (data.kecamatan) alamatLengkap += `, ${data.kecamatan}`;
+                    if (data.kodePos) alamatLengkap += ` (${data.kodePos})`;
+                    document.getElementById('resAlamat').innerText = alamatLengkap || '-';
+
+                    document.getElementById('resAyah').innerText = data.namaAyah || '-';
+                    document.getElementById('resPekerjaanAyah').innerText = data.pekerjaanAyah || '-';
+                    document.getElementById('resIbu').innerText = data.namaIbu || '-';
+                    document.getElementById('resPekerjaanIbu').innerText = data.pekerjaanIbu || '-';
+                    document.getElementById('resRombel').innerText = data.rombel || '-';
+                    document.getElementById('resSekolahAsal').innerText = data.sekolahAsal || '-';
+                    document.getElementById('resAnakSaudara').innerText = `Anak ke-${data.anakKe || '-'} dari ${data.jmlSaudara || '-'} bersaudara`;
+
+                    resultCard.style.display = 'block';
+                } else {
+                    errorBox.innerHTML = 'Data siswa dengan NISN <strong>' + nisn + '</strong> tidak ditemukan.';
+                    errorBox.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                loadingDiv.style.display = 'none';
+                errorBox.innerHTML = 'Gagal menghubungkan ke server. Pastikan URL Apps Script sudah benar.';
+                errorBox.style.display = 'block';
+                console.error(error);
+            });
+    }
+</script>
+
+</body>
+</html>
