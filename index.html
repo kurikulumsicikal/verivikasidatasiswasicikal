@@ -12,52 +12,54 @@
         body {
             background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
         }
         .container {
             background: #ffffff;
-            padding: 30px;
+            padding: 20px 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            max-width: 950px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 600px;
             width: 100%;
+            margin-top: 10px;
         }
         h2 {
             text-align: center;
             color: #1a202c;
             margin-top: 0;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            font-size: 20px;
         }
         p.subtitle {
             text-align: center;
             color: #718096;
-            margin-bottom: 24px;
-            font-size: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
         }
         .search-box {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
         input[type="text"] {
             flex: 1;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 1px solid #cbd5e0;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
         }
         button {
-            padding: 12px 24px;
+            padding: 10px 18px;
             background-color: #3182ce;
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -70,144 +72,142 @@
             display: none;
             margin: 20px 0;
             font-weight: 600;
+            font-size: 14px;
         }
         .error-box {
             background-color: #fff5f5;
             color: #e53e3e;
-            padding: 16px;
+            padding: 14px;
             border-radius: 8px;
             border: 1px solid #fed7d7;
             display: none;
             text-align: center;
             margin-top: 15px;
+            font-size: 14px;
         }
         .result-card {
             display: none;
-            margin-top: 20px;
+            margin-top: 15px;
+        }
+        .instruction {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            color: #c05621;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        /* Desain Kartu Per Item Data (Mobile Friendly) */
+        .data-item-card {
+            background: #f7fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            overflow: hidden;
+            padding: 12px;
+            margin-bottom: 12px;
         }
-        .result-header {
-            background-color: #ebf8ff;
-            color: #2b6cb0;
-            padding: 12px 16px;
-            font-weight: bold;
-            font-size: 16px;
-            border-bottom: 1px solid #bee3f8;
-        }
-        .table-data {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .table-data th, .table-data td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #edf2f7;
-            font-size: 14px;
-            text-align: left;
-            vertical-align: middle;
-        }
-        .table-data tr:nth-child(even) {
-            background-color: #f7fafc;
-        }
-        .table-data td.label {
-            font-weight: 600;
+        .data-label {
+            font-size: 12px;
+            font-weight: 700;
             color: #4a5568;
-            width: 25%;
+            text-transform: uppercase;
+            margin-bottom: 4px;
         }
-        .table-data td.value {
+        .data-value {
+            font-size: 15px;
+            font-weight: 600;
             color: #2d3748;
-            width: 35%;
+            margin-bottom: 8px;
+            word-break: break-word;
         }
-        .table-data td.action {
-            width: 40%;
+        .action-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
         }
         .btn-sesuai {
             background-color: #38a169;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            margin-right: 4px;
+            flex: 1;
         }
         .btn-sesuai:hover { background-color: #2f855a; }
         .btn-koreksi {
             background-color: #e53e3e;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
+            flex: 1;
         }
         .btn-koreksi:hover { background-color: #c53030; }
+        
         .edit-container {
             display: none;
-            margin-top: 8px;
+            margin-top: 10px;
         }
         .edit-input {
             width: 100%;
-            padding: 6px;
-            font-size: 13px;
+            padding: 8px 10px;
+            font-size: 14px;
             border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            margin-bottom: 4px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            outline: none;
         }
         .btn-kirim {
             background-color: #3182ce;
             color: white;
             border: none;
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .instruction {
-            background-color: #fffaf0;
-            border: 1px solid #feebc8;
-            color: #c05621;
-            padding: 10px;
+            padding: 6px 12px;
             border-radius: 6px;
+            cursor: pointer;
             font-size: 13px;
-            margin-bottom: 15px;
-            display: none;
+            width: 100%;
+            font-weight: 600;
         }
+        
         .status-badge {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: bold;
-            margin-top: 4px;
+            margin-top: 6px;
         }
-        .badge-sesuai { background-color: #c6f6d5; color: #22543d; }
-        .badge-koreksi { background-color: #fed7d7; color: #c53030; }
+        .badge-sesuai { background-color: #c6f6d5; color: #22543d; width: 100%; text-align: center; }
+        .badge-koreksi { background-color: #fed7d7; color: #c53030; width: 100%; word-break: break-word; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Kesesuaian Data Siswa</h2>
-    <p class="subtitle">Periksa data Anda menggunakan NIPD, klik <strong>Sesuai</strong> jika sudah benar atau pilih <strong>Koreksi</strong> jika ada yang salah</p>
+    <h2>Verifikasi Data Siswa</h2>
+    <p class="subtitle">Masukkan NIPD Anda untuk memeriksa dan mengonfirmasi kesesuaian data administrasi.</p>
     
     <div class="search-box">
-        <input type="text" id="nipdInput" placeholder="Masukkan NIPD Siswa...">
+        <input type="text" id="nipdInput" placeholder="Masukkan NIPD Anda...">
         <button onclick="verifikasiSiswa()">Cek Data</button>
     </div>
 
-    <div id="loading" class="loading">Memeriksa database...</div>
+    <div id="loading" class="loading">Memeriksa database sekolah...</div>
     <div id="errorBox" class="error-box"></div>
 
     <div id="resultCard" class="result-card">
-        <div class="result-header">Tabel Kesesuaian Data</div>
         <div class="instruction" id="instructionBox">
-            Silakan periksa setiap baris data. Status atau koreksi yang sudah pernah dikirim akan otomatis terlihat di sini.
+            💡 <strong>Petunjuk:</strong> Periksa setiap data di bawah. Klik tombol <strong>Sesuai</strong> jika benar, atau klik <strong>Koreksi</strong> untuk mengetik perbaikan data administrasi.
         </div>
-        <table class="table-data" id="dataTable"></table>
+        <div id="dataCardList"></div>
     </div>
 </div>
 
@@ -266,7 +266,7 @@
                         { label: "Anak ke-", val: data.anakKe ? `Anak ke-${data.anakKe}` : '-' }
                     ];
 
-                    let tableHtml = `<tr><th>Data Field</th><th>Data di Server</th><th>Status / Hasil Koreksi & Aksi</th></tr>`;
+                    let cardsHtml = "";
                     
                     rows.forEach((row, index) => {
                         let savedVal = data.statusKesesuaian ? data.statusKesesuaian[row.label] : "";
@@ -274,41 +274,41 @@
                         let defaultInputVal = "";
 
                         if (savedVal === "Sesuai") {
-                            badgeHtml = `<br><span class="status-badge badge-sesuai">✓ Sesuai</span>`;
+                            badgeHtml = `<div id="badgeContainer_${index}"><div class="status-badge badge-sesuai">✓ Status: Sesuai</div></div>`;
                         } else if (savedVal && savedVal !== "") {
-                            badgeHtml = `<br><span class="status-badge badge-koreksi">✎ Koreksi: <strong>${savedVal}</strong></span>`;
+                            badgeHtml = `<div id="badgeContainer_${index}"><div class="status-badge badge-koreksi">✎ Koreksi Tercatat: <strong>${savedVal}</strong></div></div>`;
                             defaultInputVal = savedVal;
+                        } else {
+                            badgeHtml = `<div id="badgeContainer_${index}"></div>`;
                         }
 
-                        tableHtml += `
-                            <tr>
-                                <td class="label">${row.label}</td>
-                                <td class="value">${row.val} <div id="badgeContainer_${index}">${badgeHtml}</div></td>
-                                <td class="action">
-                                    <div id="actionContainer_${index}">
-                                        <button class="btn-sesuai" onclick="kirimData('${row.label}', 'Sesuai', ${index})">Sesuai</button>
-                                        <button class="btn-koreksi" onclick="bukaFormKoreksi(${index})">Koreksi</button>
-                                    </div>
-                                    <div class="edit-container" id="editContainer_${index}">
-                                        <input type="text" id="editInput_${index}" class="edit-input" value="${defaultInputVal}" placeholder="Ketik data yang benar...">
-                                        <button class="btn-kirim" onclick="kirimKoreksiData('${row.label}', ${index})">Kirim Perbaikan</button>
-                                    </div>
-                                </td>
-                            </tr>
+                        cardsHtml += `
+                            <div class="data-item-card">
+                                <div class="data-label">${row.label}</div>
+                                <div class="data-value">${row.val}</div>
+                                ${badgeHtml}
+                                <div class="action-row" id="actionContainer_${index}" style="margin-top: 10px;">
+                                    <button class="btn-sesuai" onclick="kirimData('${row.label}', 'Sesuai', ${index})">Sesuai</button>
+                                    <button class="btn-koreksi" onclick="bukaFormKoreksi(${index})">Koreksi</button>
+                                </div>
+                                <div class="edit-container" id="editContainer_${index}">
+                                    <input type="text" id="editInput_${index}" class="edit-input" value="${defaultInputVal}" placeholder="Ketik perbaikan yang benar...">
+                                    <button class="btn-kirim" onclick="kirimKoreksiData('${row.label}', ${index})">Kirim Perbaikan</button>
+                                </div>
+                            </div>
                         `;
                     });
 
-                    document.getElementById('dataTable').innerHTML = tableHtml;
-                    document.getElementById('instructionBox').style.display = 'block';
+                    document.getElementById('dataCardList').innerHTML = cardsHtml;
                     resultCard.style.display = 'block';
                 } else {
-                    errorBox.innerHTML = 'Data siswa dengan NIPD <strong>' + nipd + '</strong> tidak ditemukan.';
+                    errorBox.innerHTML = 'Data siswa dengan NIPD <strong>' + nipd + '</strong> tidak ditemukan di database sekolah.';
                     errorBox.style.display = 'block';
                 }
             })
             .catch(error => {
                 loadingDiv.style.display = 'none';
-                errorBox.innerHTML = 'Gagal menghubungkan ke server.';
+                errorBox.innerHTML = 'Gagal terhubung ke server sekolah. Periksa kembali jaringan internet Anda.';
                 errorBox.style.display = 'block';
                 console.error(error);
             });
@@ -323,7 +323,7 @@
         let payload = {
             nipd: currentSiswaNipd,
             nama: currentSiswaNama,
-            field: fieldLabel,
+                    field: fieldLabel,
             koreksi: teksKirim
         };
 
@@ -335,17 +335,17 @@
         .then(response => {
             let badgeContainer = document.getElementById(`badgeContainer_${index}`);
             if(teksKirim === 'Sesuai') {
-                badgeContainer.innerHTML = `<span class="status-badge badge-sesuai">✓ Sesuai</span>`;
+                badgeContainer.innerHTML = `<div class="status-badge badge-sesuai">✓ Status: Sesuai</div>`;
                 document.getElementById(`editContainer_${index}`).style.display = 'none';
-                alert(`"${fieldLabel}" berhasil dicatat sebagai Sesuai.`);
+                alert(`"${fieldLabel}" berhasil disimpan sebagai Sesuai.`);
             } else {
-                badgeContainer.innerHTML = `<span class="status-badge badge-koreksi">✎ Koreksi: <strong>${teksKirim}</strong></span>`;
+                badgeContainer.innerHTML = `<div class="status-badge badge-koreksi">✎ Koreksi Tercatat: <strong>${teksKirim}</strong></div>`;
                 alert(`Koreksi untuk "${fieldLabel}" berhasil dikirim!`);
                 bukaFormKoreksi(index);
             }
         })
         .catch(err => {
-            alert('Gagal mengirim data. Coba lagi.');
+            alert('Gagal mengirim data. Silakan coba beberapa saat lagi.');
             console.error(err);
         });
     }
@@ -353,7 +353,7 @@
     function kirimKoreksiData(fieldLabel, index) {
         let inputVal = document.getElementById(`editInput_${index}`).value.trim();
         if (!inputVal) {
-            alert('Harap ketik data yang benar terlebih dahulu!');
+            alert('Harap ketik data yang benar terlebih dahulu sebelum mengirim!');
             return;
         }
         
