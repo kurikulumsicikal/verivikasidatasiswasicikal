@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi Data Siswa</title>
+    <title>Verifikasi Kesesuaian Data Siswa</title>
     <style>
         * {
             box-sizing: border-box;
@@ -23,7 +23,7 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            max-width: 650px;
+            max-width: 900px;
             width: 100%;
         }
         h2 {
@@ -50,10 +50,6 @@
             border-radius: 8px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-        input[type="text"]:focus {
-            border-color: #3182ce;
         }
         button {
             padding: 12px 24px;
@@ -64,7 +60,6 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
         }
         button:hover {
             background-color: #2b6cb0;
@@ -105,10 +100,11 @@
             width: 100%;
             border-collapse: collapse;
         }
-        .table-data td {
+        .table-data th, .table-data td {
             padding: 10px 14px;
             border-bottom: 1px solid #edf2f7;
             font-size: 14px;
+            text-align: left;
         }
         .table-data tr:nth-child(even) {
             background-color: #f7fafc;
@@ -116,18 +112,85 @@
         .table-data td.label {
             font-weight: 600;
             color: #4a5568;
-            width: 38%;
+            width: 25%;
         }
         .table-data td.value {
             color: #2d3748;
+            width: 35%;
         }
+        .table-data td.action {
+            width: 40%;
+        }
+        .btn-sesuai {
+            background-color: #38a169;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .btn-sesuai:hover { background-color: #2f855a; }
+        .btn-koreksi {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-koreksi:hover { background-color: #c53030; }
+        .edit-container {
+            display: none;
+            margin-top: 8px;
+        }
+        .edit-input {
+            width: 100%;
+            padding: 6px;
+            font-size: 13px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+        .btn-kirim {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .instruction {
+            background-color: #fffaf0;
+            border: 1px solid #feebc8;
+            color: #c05621;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 6px;
+        }
+        .badge-sesuai { background-color: #c6f6d5; color: #22543d; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Verifikasi Data Siswa</h2>
-    <p class="subtitle">Masukkan NISN untuk memeriksa kecocokan data siswa</p>
+    <h2>Kesesuaian Data Siswa</h2>
+    <p class="subtitle">Periksa data Anda, klik <strong>Sesuai</strong> jika sudah benar atau pilih <strong>Koreksi</strong> jika ada yang salah</p>
     
     <div class="search-box">
         <input type="text" id="nisnInput" placeholder="Masukkan NISN Siswa...">
@@ -138,29 +201,18 @@
     <div id="errorBox" class="error-box"></div>
 
     <div id="resultCard" class="result-card">
-        <div class="result-header">Data Siswa Ditemukan</div>
-        <table class="table-data">
-            <tr><td class="label">Nama Lengkap</td><td class="value" id="resNama">-</td></tr>
-            <tr><td class="label">NIPD</td><td class="value" id="resNipd">-</td></tr>
-            <tr><td class="label">Jenis Kelamin</td><td class="value" id="resJk">-</td></tr>
-            <tr><td class="label">NISN</td><td class="value" id="resNisn">-</td></tr>
-            <tr><td class="label">Tempat, Tgl Lahir</td><td class="value" id="resTtl">-</td></tr>
-            <tr><td class="label">NIK</td><td class="value" id="resNik">-</td></tr>
-            <tr><td class="label">Agama</td><td class="value" id="resAgama">-</td></tr>
-            <tr><td class="label">Alamat Lengkap</td><td class="value" id="resAlamat">-</td></tr>
-            <tr><td class="label">Nama Ayah</td><td class="value" id="resAyah">-</td></tr>
-            <tr><td class="label">Pekerjaan Ayah</td><td class="value" id="resPekerjaanAyah">-</td></tr>
-            <tr><td class="label">Nama Ibu</td><td class="value" id="resIbu">-</td></tr>
-            <tr><td class="label">Pekerjaan Ibu</td><td class="value" id="resPekerjaanIbu">-</td></tr>
-            <tr><td class="label">Rombel Saat Ini</td><td class="value" id="resRombel">-</td></tr>
-            <tr><td class="label">Sekolah Asal</td><td class="value" id="resSekolahAsal">-</td></tr>
-            <tr><td class="label">Anak ke- / Saudara</td><td class="value" id="resAnakSaudara">-</td></tr>
-        </table>
+        <div class="result-header">Tabel Kesesuaian Data</div>
+        <div class="instruction" id="instructionBox">
+            Silakan periksa setiap baris data. Klik tombol hijau <strong>Sesuai</strong> atau tombol merah <strong>Koreksi</strong> untuk memperbaikinya.
+        </div>
+        <table class="table-data" id="dataTable"></table>
     </div>
 </div>
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwKVnTxE7WrRNw_IoId4VmIepYNLEBbXWIypGgNJ7ohWNSoKOb1z6nqZRUIUMT4zL5mJw/exec";
+    let currentSiswaNama = "";
+    let currentSiswaNisn = "";
 
     function verifikasiSiswa() {
         const nisn = document.getElementById('nisnInput').value.trim();
@@ -183,36 +235,58 @@
                 loadingDiv.style.display = 'none';
 
                 if (data.found) {
-                    document.getElementById('resNama').innerText = data.nama || '-';
-                    document.getElementById('resNipd').innerText = data.nipd || '-';
-                    document.getElementById('resJk').innerText = data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : data.jk || '-');
-                    document.getElementById('resNisn').innerText = data.nisn || '-';
+                    currentSiswaNama = data.nama || '-';
+                    currentSiswaNisn = data.nisn || '-';
+
+                    let tglLahirFormatted = data.tanggalLahir ? new Date(data.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+
+                    let rows = [
+                        { label: "Nama Lengkap", val: currentSiswaNama },
+                        { label: "Jenis Kelamin", val: data.jk === 'L' ? 'Laki-Laki' : (data.jk === 'P' ? 'Perempuan' : data.jk || '-') },
+                        { label: "NIPD", val: data.nipd || '-' },
+                        { label: "NISN", val: currentSiswaNisn },
+                        { label: "Tempat Lahir", val: data.tempatLahir || '-' },
+                        { label: "Tanggal Lahir", val: tglLahirFormatted },
+                        { label: "NIK", val: data.nik || '-' },
+                        { label: "Agama", val: data.agama || '-' },
+                        { label: "Alamat", val: data.alamat || '-' },
+                        { label: "RT", val: data.rt !== undefined && data.rt !== "" ? data.rt : '-' },
+                        { label: "RW", val: data.rw !== undefined && data.rw !== "" ? data.rw : '-' },
+                        { label: "Kelurahan", val: data.kelurahan || '-' },
+                        { label: "Kecamatan", val: data.kecamatan || '-' },
+                        { label: "Kode Pos", val: data.kodePos || '-' },
+                        { label: "Nama Ayah", val: data.namaAyah || '-' },
+                        { label: "Pekerjaan Ayah", val: data.pekerjaanAyah || '-' },
+                        { label: "Nama Ibu", val: data.namaIbu || '-' },
+                        { label: "Pekerjaan Ibu", val: data.pekerjaanIbu || '-' },
+                        { label: "Rombel Saat Ini", val: data.rombel || '-' },
+                        { label: "Sekolah Asal", val: data.sekolahAsal || '-' },
+                        { label: "Anak ke-", val: data.anakKe ? `Anak ke-${data.anakKe}` : '-' }
+                    ];
+
+                    let tableHtml = `<tr><th>Data Field</th><th>Data di Server</th><th>Aksi Verifikasi</th></tr>`;
                     
-                    let ttl = `${data.tempatLahir || ''}`;
-                    if (data.tanggalLahir) {
-                        let tgl = new Date(data.tanggalLahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                        ttl += ttl ? `, ${tgl}` : tgl;
-                    }
-                    document.getElementById('resTtl').innerText = ttl || '-';
+                    rows.forEach((row, index) => {
+                        tableHtml += `
+                            <tr>
+                                <td class="label">${row.label}</td>
+                                <td class="value" id="valCell_${index}">${row.val} <span id="badge_${index}"></span></td>
+                                <td class="action">
+                                    <div id="actionContainer_${index}">
+                                        <button class="btn-sesuai" onclick="kirimData('${row.label}', 'Sesuai', ${index})">Sesuai</button>
+                                        <button class="btn-koreksi" onclick="bukaFormKoreksi(${index})">Koreksi</button>
+                                    </div>
+                                    <div class="edit-container" id="editContainer_${index}">
+                                        <input type="text" id="editInput_${index}" class="edit-input" placeholder="Ketik data yang benar...">
+                                        <button class="btn-kirim" onclick="kirimKoreksiData('${row.label}', ${index})">Kirim Perbaikan</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
 
-                    document.getElementById('resNik').innerText = data.nik || '-';
-                    document.getElementById('resAgama').innerText = data.agama || '-';
-                    
-                    let alamatLengkap = `${data.alamat || ''}`;
-                    if (data.rt || data.rw) alamatLengkap += ` RT ${data.rt || 0}/RW ${data.rw || 0}`;
-                    if (data.kelurahan) alamatLengkap += `, Desa/Kel. ${data.kelurahan}`;
-                    if (data.kecamatan) alamatLengkap += `, ${data.kecamatan}`;
-                    if (data.kodePos) alamatLengkap += ` (${data.kodePos})`;
-                    document.getElementById('resAlamat').innerText = alamatLengkap || '-';
-
-                    document.getElementById('resAyah').innerText = data.namaAyah || '-';
-                    document.getElementById('resPekerjaanAyah').innerText = data.pekerjaanAyah || '-';
-                    document.getElementById('resIbu').innerText = data.namaIbu || '-';
-                    document.getElementById('resPekerjaanIbu').innerText = data.pekerjaanIbu || '-';
-                    document.getElementById('resRombel').innerText = data.rombel || '-';
-                    document.getElementById('resSekolahAsal').innerText = data.sekolahAsal || '-';
-                    document.getElementById('resAnakSaudara').innerText = `Anak ke-${data.anakKe || '-'} dari ${data.jmlSaudara || '-'} bersaudara`;
-
+                    document.getElementById('dataTable').innerHTML = tableHtml;
+                    document.getElementById('instructionBox').style.display = 'block';
                     resultCard.style.display = 'block';
                 } else {
                     errorBox.innerHTML = 'Data siswa dengan NISN <strong>' + nisn + '</strong> tidak ditemukan.';
@@ -221,10 +295,55 @@
             })
             .catch(error => {
                 loadingDiv.style.display = 'none';
-                errorBox.innerHTML = 'Gagal menghubungkan ke server. Pastikan URL Apps Script sudah benar.';
+                errorBox.innerHTML = 'Gagal menghubungkan ke server.';
                 errorBox.style.display = 'block';
                 console.error(error);
             });
+    }
+
+    function bukaFormKoreksi(index) {
+        let container = document.getElementById(`editContainer_${index}`);
+        container.style.display = container.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function kirimData(fieldLabel, teksKirim, index) {
+        let payload = {
+            nisn: currentSiswaNisn,
+            nama: currentSiswaNama,
+            field: fieldLabel,
+            koreksi: teksKirim
+        };
+
+        fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(response => {
+            if(teksKirim === 'Sesuai') {
+                document.getElementById(`badge_${index}`).innerHTML = `<span class="status-badge badge-sesuai">✓ Sesuai</span>`;
+                document.getElementById(`editContainer_${index}`).style.display = 'none';
+                alert(`"${fieldLabel}" berhasil dicatat sebagai Sesuai.`);
+            } else {
+                document.getElementById(`badge_${index}`).innerHTML = `<span class="status-badge" style="background-color:#fed7d7; color:#c53030;">✎ Dikoreksi</span>`;
+                alert(`Koreksi untuk "${fieldLabel}" berhasil dikirim!`);
+                bukaFormKoreksi(index);
+            }
+        })
+        .catch(err => {
+            alert('Gagal mengirim data. Coba lagi.');
+            console.error(err);
+        });
+    }
+
+    function kirimKoreksiData(fieldLabel, index) {
+        let inputVal = document.getElementById(`editInput_${index}`).value.trim();
+        if (!inputVal) {
+            alert('Harap ketik data yang benar terlebih dahulu!');
+            return;
+        }
+        
+        kirimData(fieldLabel, inputVal, index);
     }
 </script>
 
